@@ -92,6 +92,8 @@ const select = {
       console.log('cartButton',thisProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
       console.log('całkowita cena:', thisProduct.priceElem);
+      thisProduct.imageWrapper=thisProduct.element.querySelector(select.menuProduct.imageWrapper);
+      console.log('wrapper obrazu',thisProduct.imageWrapper);
     }
     initAccordion(){
       const thisProduct = this;
@@ -153,26 +155,37 @@ processOrder(){
   const param = thisProduct.data.params[paramId];
   console.log('param:',paramId, param);
 
+
+
     // for every option in this category
     for(let optionId in param.options) {
       // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
-      const option = param.options[optionId];
-      console.log('opcje',optionId, option);
-      const dane = formData[paramId];
-      console.log('dane',dane);
-      if(formData[paramId]&&formData[paramId].includes(optionId)){
-        if(!option.default){
-        price +=option.price;
-        }
-      }
-      else{
-        if(option.default){
-        price -= option.price;
-        }
-      }
-    }
-  }
+       const option = param.options[optionId];
+        console.log('opcje',optionId, option);
+        const dane = formData[paramId];
+        console.log('dane',dane);
+        const optionImage = thisProduct.imageWrapper.querySelector('.'+ paramId + '-' + optionId);
+        console.log('opcje obrazka:', optionImage);
+        const optionsSelected = formData[paramId]&&formData[paramId].includes(optionId);
+        if(optionsSelected){
+          if(!option.default){
+            price +=option.price;
+            }
+          if (optionImage){
+            optionImage.classList.add (classNames.menuProduct.imageVisible);
+          }
 
+        }
+        else{
+          if(option.default){
+            price -= option.price;
+          }
+          if (optionImage){
+          optionImage.classList.remove (classNames.menuProduct.imageVisible);
+          }
+        }
+      }
+ }
 
   // update calculated price in the HTML
   thisProduct.priceElem.innerHTML = price;
