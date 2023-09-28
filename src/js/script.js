@@ -61,6 +61,7 @@ const select = {
       thisProduct.getElements();
       thisProduct.initAccordion();
       thisProduct.initOrderForm();
+      thisProduct.initAmountWidget();
       thisProduct.processOrder();
       console.log('new Product;', thisProduct);
     }
@@ -85,15 +86,17 @@ const select = {
 
       thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
       thisProduct.form = thisProduct.element.querySelector(select.menuProduct.form);
-      console.log('formularz:',thisProduct.form);
+     // console.log('formularz:',thisProduct.form);
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
-      console.log('formularz inputy',thisProduct.formInputs);
+     // console.log('formularz inputy',thisProduct.formInputs);
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
-      console.log('cartButton',thisProduct.cartButton);
+     // console.log('cartButton',thisProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
-      console.log('całkowita cena:', thisProduct.priceElem);
+     // console.log('całkowita cena:', thisProduct.priceElem);
       thisProduct.imageWrapper=thisProduct.element.querySelector(select.menuProduct.imageWrapper);
-      console.log('wrapper obrazu',thisProduct.imageWrapper);
+     // console.log('wrapper obrazu',thisProduct.imageWrapper);
+     thisProduct.amountWidgetElem=thisProduct.element.querySelector(select.menuProduct.amountWidget);
+     console.log('widget ilości',thisProduct.amountWidgetElem);
     }
     initAccordion(){
       const thisProduct = this;
@@ -105,7 +108,7 @@ const select = {
        event.preventDefault();
       /* find active product (product that has active class)*/
       const activeProduct = document.querySelector(select.all.menuProductsActive);
-      console.log('acitve product:',activeProduct);
+     // console.log('acitve product:',activeProduct);
       /* if there is active product and it's not thisProduct.element, remove class active from it*/
 
       if ((activeProduct !== null)  && (activeProduct !== thisProduct.element)) {
@@ -116,9 +119,15 @@ const select = {
        thisProduct.element.classList.toggle(classNames.menuProduct.wrapperActive);
       });
     }
+
+    initAmountWidget(){
+      const thisProduct = this;
+      thisProduct.amountWidget=new AmountWidget(thisProduct.amountWidgetElem);
+    }
+
 initOrderForm(){
   const thisProduct = this;
-  console.log('initOrderForm');
+ // console.log('initOrderForm');
 
   thisProduct.form.addEventListener('submit', function(event){
     event.preventDefault();
@@ -161,11 +170,11 @@ processOrder(){
     for(let optionId in param.options) {
       // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
        const option = param.options[optionId];
-        console.log('opcje',optionId, option);
+       // console.log('opcje',optionId, option);
         const dane = formData[paramId];
-        console.log('dane',dane);
+       // console.log('dane',dane);
         const optionImage = thisProduct.imageWrapper.querySelector('.'+ paramId + '-' + optionId);
-        console.log('opcje obrazka:', optionImage);
+       // console.log('opcje obrazka:', optionImage);
         const optionsSelected = formData[paramId]&&formData[paramId].includes(optionId);
         if(optionsSelected){
           if(!option.default){
@@ -193,6 +202,24 @@ processOrder(){
 
 }
   }
+
+class AmountWidget {
+  constructor(element){
+    const thisWidget = this;
+
+    console.log ('AmountWidget:', thisWidget);
+    console.log ('constructor arguments:', element);
+    thisWidget.getElements(element);
+  }
+  getElements(element){
+    const thisWidget = this;
+
+    thisWidget.element = element;
+    thisWidget.input = thisWidget.element.querySelector(select.widgets.amount.input);
+    thisWidget.linkDecrease = thisWidget.element.querySelector(select.widgets.amount.linkDecrease);
+    thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
+  }
+}
 
   const app = {
 
