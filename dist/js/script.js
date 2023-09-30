@@ -123,6 +123,7 @@ const select = {
     initAmountWidget(){
       const thisProduct = this;
       thisProduct.amountWidget=new AmountWidget(thisProduct.amountWidgetElem);
+      thisProduct.amountWidgetElem.addEventListener('updated', function(){thisProduct.processOrder()});
     }
 
 initOrderForm(){
@@ -195,6 +196,8 @@ processOrder(){
         }
       }
  }
+  /*multiply price by amount*/
+  price*=thisProduct.amountWidget.value;
 
   // update calculated price in the HTML
   thisProduct.priceElem.innerHTML = price;
@@ -211,7 +214,11 @@ class AmountWidget {
     console.log ('constructor arguments:', element);
     thisWidget.getElements(element);
     thisWidget.initActions();
-    thisWidget.setValue(thisWidget.input.value);
+    if (thisWidget.input.value)
+    {
+    thisWidget.setValue(thisWidget.input.value);}
+    else
+    {thisWidget.setValue(settings.amountWidget.defaultValue);}
 
   }
   getElements(element){
@@ -236,6 +243,12 @@ initActions(){
     thisWidget.setValue(thisWidget.value + 1);
   });
 }
+announce() {
+  const thisWidget = this;
+
+  const event = new Event ('updated');
+  thisWidget.element.dispatchEvent(event);
+}
 
 
   setValue(value){
@@ -251,6 +264,7 @@ initActions(){
       console.log('thisWidgetvalue',thisWidget.value);}
 
     thisWidget.input.value = thisWidget.value;
+    thisWidget.announce();
   }
 }
 
