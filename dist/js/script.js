@@ -172,7 +172,7 @@ processOrder(){
        const option = param.options[optionId];
        // console.log('opcje',optionId, option);
         const dane = formData[paramId];
-       // console.log('dane',dane);
+        console.log('dane',dane);
         const optionImage = thisProduct.imageWrapper.querySelector('.'+ paramId + '-' + optionId);
        // console.log('opcje obrazka:', optionImage);
         const optionsSelected = formData[paramId]&&formData[paramId].includes(optionId);
@@ -210,6 +210,8 @@ class AmountWidget {
     console.log ('AmountWidget:', thisWidget);
     console.log ('constructor arguments:', element);
     thisWidget.getElements(element);
+    thisWidget.setValue(thisWidget.input.value);
+
   }
   getElements(element){
     const thisWidget = this;
@@ -218,6 +220,23 @@ class AmountWidget {
     thisWidget.input = thisWidget.element.querySelector(select.widgets.amount.input);
     thisWidget.linkDecrease = thisWidget.element.querySelector(select.widgets.amount.linkDecrease);
     thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
+  }
+
+
+
+  setValue(value){
+    const thisWidget = this;
+    console.log('thisWidget',thisWidget);
+    const newValue = parseInt(value);
+
+
+    /*TODO: Add validation*/
+    if (thisWidget.value!== newValue && !isNaN(newValue))
+    {
+      thisWidget.value = newValue;
+      console.log('thisWidgetvalue',thisWidget.value);}
+
+    thisWidget.input.value = thisWidget.value;
   }
 }
 
