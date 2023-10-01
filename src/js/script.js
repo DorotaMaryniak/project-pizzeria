@@ -110,26 +110,22 @@ const select = {
 
     getElements(){
       const thisProduct = this;
+      thisProduct.dom={
 
-      thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
-      thisProduct.form = thisProduct.element.querySelector(select.menuProduct.form);
-     // console.log('formularz:',thisProduct.form);
-      thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
-     // console.log('formularz inputy',thisProduct.formInputs);
-      thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
-     // console.log('cartButton',thisProduct.cartButton);
-      thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
-     // console.log('całkowita cena:', thisProduct.priceElem);
-      thisProduct.imageWrapper=thisProduct.element.querySelector(select.menuProduct.imageWrapper);
-     // console.log('wrapper obrazu',thisProduct.imageWrapper);
-     thisProduct.amountWidgetElem=thisProduct.element.querySelector(select.menuProduct.amountWidget);
-     console.log('widget ilości',thisProduct.amountWidgetElem);
+      accordionTrigger: thisProduct.element.querySelector(select.menuProduct.clickable),
+      form: thisProduct.element.querySelector(select.menuProduct.form),
+      formInputs: thisProduct.element.querySelectorAll(select.all.formInputs),
+      cartButton: thisProduct.element.querySelector(select.menuProduct.cartButton),
+      priceElem: thisProduct.element.querySelector(select.menuProduct.priceElem),
+      imageWrapper: thisProduct.element.querySelector(select.menuProduct.imageWrapper),
+      amountWidgetElem: thisProduct.element.querySelector(select.menuProduct.amountWidget),
+      }
     }
     initAccordion(){
       const thisProduct = this;
       /* find the clickable trigger (the element that should react to clickling)*/
       /* START: add event listener to clickable trigger on event click*/
-      thisProduct.accordionTrigger.addEventListener('click', function(event)
+      thisProduct.dom.accordionTrigger.addEventListener('click', function(event)
       {
       /* prevent default action for event*/
        event.preventDefault();
@@ -149,25 +145,25 @@ const select = {
 
     initAmountWidget(){
       const thisProduct = this;
-      thisProduct.amountWidget=new AmountWidget(thisProduct.amountWidgetElem);
-      thisProduct.amountWidgetElem.addEventListener('updated', function(){thisProduct.processOrder()});
+      thisProduct.amountWidget=new AmountWidget(thisProduct.dom.amountWidgetElem);
+      thisProduct.dom.amountWidgetElem.addEventListener('updated', function(){thisProduct.processOrder()});
     }
 
 initOrderForm(){
   const thisProduct = this;
  // console.log('initOrderForm');
 
-  thisProduct.form.addEventListener('submit', function(event){
+  thisProduct.dom.form.addEventListener('submit', function(event){
     event.preventDefault();
     thisProduct.processOrder();
   });
 
-  for(let input of thisProduct.formInputs){
+  for(let input of thisProduct.dom.formInputs){
     input.addEventListener('change', function(){
       thisProduct.processOrder();
     });
 
-    thisProduct.cartButton.addEventListener('click', function(event){
+    thisProduct.dom.cartButton.addEventListener('click', function(event){
       event.preventDefault();
       thisProduct.processOrder();
     });
@@ -181,7 +177,7 @@ processOrder(){
  const thisProduct = this;
   console.log ('processOrder');
     // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
-  const formData = utils.serializeFormToObject(thisProduct.form);
+  const formData = utils.serializeFormToObject(thisProduct.dom.form);
   console.log('formData', formData);
 
  // set price to default price
@@ -201,7 +197,7 @@ processOrder(){
        // console.log('opcje',optionId, option);
         const dane = formData[paramId];
         console.log('dane',dane);
-        const optionImage = thisProduct.imageWrapper.querySelector('.'+ paramId + '-' + optionId);
+        const optionImage = thisProduct.dom.imageWrapper.querySelector('.'+ paramId + '-' + optionId);
        // console.log('opcje obrazka:', optionImage);
         const optionsSelected = formData[paramId]&&formData[paramId].includes(optionId);
         if(optionsSelected){
@@ -227,7 +223,7 @@ processOrder(){
   price*=thisProduct.amountWidget.value;
 
   // update calculated price in the HTML
-  thisProduct.priceElem.innerHTML = price;
+  thisProduct.dom.priceElem.innerHTML = price;
 
 
 }
@@ -295,6 +291,21 @@ announce() {
   }
 }
 
+class Cart{
+  constructor(element){
+    const thisCart = this;
+    thisCart.products = [];
+    thisCart.getElements(element);
+    console.log('new Cart', thisCart);
+  }
+
+  getElements(element){
+    const thisCart = this;
+    thisCart.dom = {};
+    thisCart.dom.wrapper = element;
+
+  }
+}
   const app = {
 
     initMenu: function (){
@@ -312,6 +323,13 @@ announce() {
       thisApp.data = dataSource;
     },
 
+    initCart: function(){
+      const thisApp = this;
+      const cartElem = document.querySelector(select.containerOf.cart);
+      thisApp.cart = new Cart(cartElem);
+    },
+
+
     init: function(){
       const thisApp = this;
       console.log('*** App starting ***');
@@ -322,6 +340,7 @@ announce() {
 
       thisApp.initData();
       thisApp.initMenu();
+      thisApp.initCart();
     },
   };
 
