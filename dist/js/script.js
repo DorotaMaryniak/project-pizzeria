@@ -162,6 +162,7 @@ initOrderForm(){
     input.addEventListener('change', function(){
       thisProduct.processOrder();
     });
+  }
 
     thisProduct.dom.cartButton.addEventListener('click', function(event){
       event.preventDefault();
@@ -170,7 +171,7 @@ initOrderForm(){
     });
 
 
-  }
+
 
 }
 
