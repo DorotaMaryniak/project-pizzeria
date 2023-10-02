@@ -411,6 +411,7 @@ class CartProduct{
 
     thisCartProduct.getElements(element);
     console.log('thisCartProduct',thisCartProduct);
+    thisCartProduct.initAmountWidget();
   }
   getElements(element){
     const thisCartProduct = this;
@@ -421,7 +422,15 @@ class CartProduct{
     thisCartProduct.dom.edit = element.querySelector(select.cartProduct.edit);
     thisCartProduct.dom.remove = element.querySelector(select.cartProduct.remove);
   }
-
+  initAmountWidget(){
+    const thisCartProduct = this;
+    thisCartProduct.amountWidget=new AmountWidget(thisCartProduct.dom.amountWidget);
+    console.log('wyswietlony widget', thisCartProduct.amountWidget);
+    thisCartProduct.dom.amountWidget.addEventListener('updated', function(){
+    thisCartProduct.amount = thisCartProduct.amountWidget.value;
+    thisCartProduct.price = thisCartProduct.amount * thisCartProduct.priceSingle;
+    thisCartProduct.dom.price.innerHTML=thisCartProduct.price });
+  }
 }
   const app = {
 
