@@ -382,7 +382,21 @@ class Cart{
     thisCart.dom.productList.addEventListener('updated', function(){
       thisCart.update();
     });
+    thisCart.dom.productList.addEventListener('remove', function(event){
+      thisCart.remove(event.detail.cartProduct);
+    });
 
+  }
+
+  remove(productToRemove){
+    const thisCart = this;
+    productToRemove.dom.wrapper.remove();
+    const indexOfProduct = thisCart.products.indexOf('productToRemove');
+    console.log('index',indexOfProduct);
+    console.log('tablica produktow', thisCart.products);
+    thisCart.products.splice(indexOfProduct,1);
+    console.log('tablica z usunietym', thisCart.products);
+    thisCart.update();
   }
 
   add(menuProduct){
@@ -450,6 +464,7 @@ class CartProduct{
     thisCartProduct.getElements(element);
     console.log('thisCartProduct',thisCartProduct);
     thisCartProduct.initAmountWidget();
+    thisCartProduct.initActions();
   }
   getElements(element){
     const thisCartProduct = this;
@@ -468,6 +483,31 @@ class CartProduct{
     thisCartProduct.amount = thisCartProduct.amountWidget.value;
     thisCartProduct.price = thisCartProduct.amount * thisCartProduct.priceSingle;
     thisCartProduct.dom.price.innerHTML=thisCartProduct.price });
+  }
+
+  remove(){
+    const thisCartProduct = this;
+    const event = new CustomEvent ('remove',{
+      bubbles: true,
+      detail: {
+        cartProduct: thisCartProduct,
+      },
+    }) ;
+    thisCartProduct.dom.wrapper.dispatchEvent(event);
+    console.log('metoda remove');
+  }
+
+  initActions(){
+   const thisCartProduct = this;
+    thisCartProduct.dom.edit.addEventListener('click',function(event){
+      event.preventDefault();
+    });
+
+    thisCartProduct.dom.remove.addEventListener('click',function(event){
+      event.preventDefault();
+      thisCartProduct.remove();
+    });
+
   }
 }
   const app = {
