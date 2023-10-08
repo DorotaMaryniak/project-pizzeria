@@ -474,7 +474,25 @@ class Cart{
     deliveryFee: thisCart.deliveryFee,
     products: [],
   }
+  for (let prod of thisCart.products){
+    payload.products.push(prod.getData());
+  }
   console.log('obiekt payload', payload);
+
+const options= {
+  method:'POST',
+  headers:{
+    'Content-Type':'application/json',
+  },
+  body: JSON.stringify(payload)
+};
+fetch(url,options)
+.then(function(response) {
+  return response.json();
+})
+.then(function(parsedResponse) {
+  console.log('parsed response - sentOrder', parsedResponse);
+});
 }
 
 }
@@ -539,6 +557,20 @@ class CartProduct{
     });
 
   }
+  getData(){
+    const thisCartProduct = this;
+    const CartproductSummary = {
+      id: thisCartProduct.id,
+      name: thisCartProduct.name,
+      amount: thisCartProduct.amount,
+      priceSingle: thisCartProduct.priceSingle,
+      price:  thisCartProduct.priceSingle,
+      params: thisCartProduct.params,
+
+    };
+    return CartproductSummary;
+
+    }
 }
   const app = {
 
