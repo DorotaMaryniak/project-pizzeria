@@ -538,7 +538,7 @@ class CartProduct{
          })
         .then(function(parsedResponse){
           console.log('parsedResponse',parsedResponse);
-          parsedResponse = thisApp.data.products;
+          thisApp.data.products = parsedResponse;
           thisApp.initMenu();
         });
         console.log('thisApp.data',JSON.stringify(thisApp.data));
