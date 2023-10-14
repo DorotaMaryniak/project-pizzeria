@@ -3,6 +3,7 @@
 import { settings, select, classNames } from './settings.js';
 import Product from './components/Product.js';
 import Cart from './components/Cart.js';
+import Booking from './components/Booking.js';
 
 
 
@@ -13,7 +14,7 @@ import Cart from './components/Cart.js';
       thisApp.navLinks = document.querySelectorAll(select.nav.links);
 
       const idFromHash = window.location.hash.replace('#/', '');
-      console.log('idFromHash', idFromHash);
+     // console.log('idFromHash', idFromHash);
 
       let pageMatchingHash = thisApp.pages [0].id;
 
@@ -40,6 +41,8 @@ import Cart from './components/Cart.js';
       }
 
 
+
+
     },
     activatePage: function(pageId){
       const thisApp = this;
@@ -60,6 +63,12 @@ import Cart from './components/Cart.js';
        }
 
     },
+    initBooking: function (){
+      const thisApp = this;
+        thisApp.bookingContainer = document.querySelector(select.containerOf.booking);
+
+        thisApp.booking = new Booking(thisApp.bookingContainer);
+      },
 
     initMenu: function (){
       const thisApp = this;
@@ -108,6 +117,7 @@ import Cart from './components/Cart.js';
       thisApp.initData();
       //thisApp.initMenu();
       thisApp.initCart();
+      thisApp.initBooking();
     },
   };
 

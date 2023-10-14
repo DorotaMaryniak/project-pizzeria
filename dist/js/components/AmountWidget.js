@@ -49,7 +49,7 @@ class AmountWidget {
 
     setValue(value){
       const thisWidget = this;
-      console.log('thisWidget',thisWidget);
+      //console.log('thisWidget',thisWidget);
       const newValue = parseInt(value);
 
 
@@ -57,12 +57,13 @@ class AmountWidget {
       if (thisWidget.value!== newValue && !isNaN(newValue)&& (newValue>=settings.amountWidget.defaultMin && newValue<=settings.amountWidget.defaultMax))
       {
         thisWidget.value = newValue;
-        console.log('thisWidgetvalue',thisWidget.value);}
+        //console.log('thisWidgetvalue',thisWidget.value);}
 
       thisWidget.input.value = thisWidget.value;
       thisWidget.announce();
     }
 
   }
+}
 
   export default AmountWidget;
