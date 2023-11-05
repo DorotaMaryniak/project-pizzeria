@@ -11,6 +11,7 @@ class Booking {
         thisBooking.render(element);
        thisBooking.initWidgets();
        thisBooking.getData();
+       thisBooking.selected = {};
 
     }
     getData(){
@@ -167,7 +168,7 @@ class Booking {
         thisBooking.dom.datePicker=element.querySelector(select.widgets.datePicker.wrapper);
         thisBooking.dom.hourPicker=element.querySelector(select.widgets.hourPicker.wrapper);
         thisBooking.dom.tables = thisBooking.dom.wrapper.querySelectorAll(select.booking.tables);
-
+        thisBooking.dom.floorPlan= element.querySelector(select.booking.floorPlan);
     }
 
 
@@ -183,9 +184,44 @@ class Booking {
         thisBooking.hourPicker = new HourPicker(thisBooking.dom.hourPicker);
 
         thisBooking.dom.wrapper.addEventListener('updated', function(){
+            thisBooking.removeTables();
             thisBooking.updateDOM();
         });
+
+        thisBooking.dom.floorPlan.addEventListener('click', function (event){
+            thisBooking.initTables(event);
+        })
 }
+
+removeTables() {
+   const thisBooking = this;
+
+    for (let table of thisBooking.dom.tables) {
+      table.classList.remove(classNames.booking.tableSelected);
+    }
+  }
+
+
+
+initTables(event) {
+    const thisBooking = this;
+    const tableId= event.target.getAttribute('data-table');
+    const isBooked=event.target.classList.contains(classNames.booking.tableBooked);
+    const isSelected=event.target.classList.contains(classNames.booking.tableSelected);
+    if (tableId) {
+        if (isBooked) {
+          alert('This table is already booked. Choose another table.');
+        } else if (isSelected) {
+          event.target.classList.remove(classNames.booking.tableSelected);
+          thisBooking.selected = {};
+        } else if (!isSelected) {
+          thisBooking.removeTables();
+          event.target.classList.add(classNames.booking.tableSelected);
+          thisBooking.selected = tableId;
+        }
+      }
+      console.log('selected', thisBooking.selected);
+  }
 }
 
 export default Booking;

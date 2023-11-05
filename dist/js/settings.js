@@ -43,6 +43,7 @@
         peopleAmount: '.people-amount',
         hoursAmount: '.hours-amount',
         tables: '.floor-plan .table',
+        floorPlan: '.floor-plan',
     },
     nav: {
         links: '.main-nav a',
@@ -81,6 +82,7 @@
       booking: {
         loading: 'loading',
         tableBooked: 'booked',
+        tableSelected: 'selected',
     },
     nav: {
         active: 'active',
