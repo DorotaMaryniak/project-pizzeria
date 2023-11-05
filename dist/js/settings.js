@@ -44,6 +44,10 @@
         hoursAmount: '.hours-amount',
         tables: '.floor-plan .table',
         floorPlan: '.floor-plan',
+        bookingButton: '.order-confirmation button',
+        phone: '[name="phone"]',
+        address: '[name="address"]',
+        starters: '.checkbox label input',
     },
     nav: {
         links: '.main-nav a',

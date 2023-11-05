@@ -169,8 +169,11 @@ class Booking {
         thisBooking.dom.hourPicker=element.querySelector(select.widgets.hourPicker.wrapper);
         thisBooking.dom.tables = thisBooking.dom.wrapper.querySelectorAll(select.booking.tables);
         thisBooking.dom.floorPlan= element.querySelector(select.booking.floorPlan);
+        thisBooking.dom.bookingButton =  element.querySelector(select.booking.bookingButton);
+        thisBooking.dom.phone = element.querySelector(select.booking.phone);
+        thisBooking.dom.address = element.querySelector(select.booking.address);
+        thisBooking.dom.starters = element.querySelectorAll(select.booking.starters);
     }
-
 
     initWidgets(){
         const thisBooking = this;
@@ -190,7 +193,12 @@ class Booking {
 
         thisBooking.dom.floorPlan.addEventListener('click', function (event){
             thisBooking.initTables(event);
-        })
+        });
+
+        thisBooking.dom.bookingButton.addEventListener('click', function (event){
+           event.preventDefault();
+            thisBooking.sendBooking();
+        });
 }
 
 removeTables() {
@@ -221,6 +229,42 @@ initTables(event) {
         }
       }
       console.log('selected', thisBooking.selected);
+  }
+
+  sendBooking() {
+    const thisBooking = this;
+    const url = settings.db.url + '/' + settings.db.bookings;
+    const payload = {
+      date: thisBooking.datePicker.value,
+      hour: thisBooking.hourPicker.value,
+      table: parseInt(thisBooking.selected),
+      duration: parseInt(thisBooking.hoursAmount.value),
+      ppl: parseInt(thisBooking.peopleAmount.value),
+      starters: [],
+      phone: thisBooking.dom.phone.value,
+      address: thisBooking.dom.address.value,
+    };
+
+    for (let starter of thisBooking.dom.starters) {
+      if (starter.checked) {
+        payload.starters.push(starter.value);
+      }
+    }
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload)
+    };
+    fetch(url, options)
+      .then(function (response) {
+        return response.json();
+      }).then(function (parsedResponse) {
+        console.log('parsedResponse', parsedResponse);
+        thisBooking.makeBooked(payload.date, payload.hour, payload.duration, payload.table);
+      });
   }
 }
 
